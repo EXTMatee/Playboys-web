@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playboys Syndicate • GTA V RP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030305;
+            --bg-card: #0a0a0d;
+            --accent-red: #bf212f;
+            --accent-gold: #b89047;
+            --text-light: #f4f4f5;
+            --text-gray: #a1a1aa;
+            --transition: cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Montserrat', sans-serif; overflow-x: hidden; scroll-behavior: smooth; background-image: radial-gradient(circle at 50% 0%, rgba(191,33,47,0.05) 0%, transparent 50%); }
+        
+        /* Dinamikus háttér izzás */
+        .bg-glow { position: absolute; top: -20%; left: -10%; width: 800px; height: 800px; background: radial-gradient(circle, rgba(191,33,47,0.06) 0%, rgba(0,0,0,0) 60%); z-index: -1; pointer-events: none; filter: blur(50px); animation: pulseGlow 8s infinite alternate; }
+        @keyframes pulseGlow { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-red); border-radius: 4px; }
+        
+        /* Egyedi kurzor */
+        .custom-cursor-dot { width: 6px; height: 6px; background-color: var(--accent-red); position: fixed; pointer-events: none; z-index: 10000; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--accent-red); }
+        .custom-cursor-outline { width: 45px; height: 45px; border: 1px solid rgba(184, 144, 71, 0.5); position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; transform: translate(-50%, -50%); transition: transform 0.15s ease-out, border-color 0.3s; }
+
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(3,3,5,0.85); border-bottom: 1px solid rgba(255,255,255,0.02); backdrop-filter: blur(15px); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .logo span { color: var(--accent-red); text-shadow: 0 0 20px rgba(191,33,47,0.6); }
+        .nav-links { display: flex; gap: 30px; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-gray); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative; }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: var(--accent-gold); transition: var(--transition); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .btn-tgf { background: linear-gradient(135deg, var(--accent-red) 0%, #8a141f 100%); color: #fff !important; padding: 10px 24px; border-radius: 4px; border: 1px solid rgba(255,100,100,0.2); box-shadow: 0 5px 20px rgba(191,33,47,0.3); font-weight: 700; }
+        .btn-tgf::after { display: none; }
+        .btn-tgf:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(191,33,47,0.5); }
+
+        .view-section { display: none; min-height: 100vh; padding: 160px 5% 80px 5%; max-width: 1400px; margin: 0 auto; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .view-section.active-view { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Felturbózott tipográfia */
+        .title-large { font-family: 'Playfair Display', serif; font-size: 4.5rem; text-transform: uppercase; margin-bottom: 10px; line-height: 1; letter-spacing: -2px; background: linear-gradient(to bottom right, #ffffff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .title-large span { background: linear-gradient(to bottom right, #ff4d4d, var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 25px rgba(191,33,47,0.4)); }
+        .subtitle { color: var(--accent-gold); font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; margin-bottom: 40px; letter-spacing: 2px; }
+
+        /* Brutális Főoldal Elrendezés */
+        .story-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; }
+        
+        .story-content { background: rgba(10, 10, 13, 0.6); padding: 50px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); backdrop-filter: blur(20px); box-shadow: inset 0 0 0 1px rgba(184, 144, 71, 0.1), 0 30px 60px rgba(0,0,0,0.8); position: relative; }
+        .story-content::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100px; background: var(--accent-red); border-top-left-radius: 16px; }
+        
+        .story-text p { margin-bottom: 25px; line-height: 2; color: var(--text-gray); text-align: justify; font-size: 1.05rem; font-weight: 400; }
+        .story-text p:first-of-type { color: #fff; font-size: 1.15rem; font-weight: 500; border-left: 2px solid var(--accent-gold); padding-left: 20px; font-style: italic; }
+        
+        /* Új, lüktető Kép Tároló Dizájn */
+        .faction-image-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 40px rgba(191,33,47,0.15); background: #000; animation: floatImg 6s ease-in-out infinite; transition: var(--transition); }
+        .faction-image-container::after { content: ''; position: absolute; inset: 0; border: 2px solid rgba(191,33,47,0.2); border-radius: 12px; pointer-events: none; transition: var(--transition); }
+        .faction-image-container img { width: 100%; height: auto; display: block; filter: grayscale(30%) contrast(110%); transition: var(--transition); transform: scale(1.02); }
+        
+        @keyframes floatImg { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* Kép Hover Effektek */
+        .faction-image-container:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 60px rgba(191,33,47,0.4); }
+        .faction-image-container:hover::after { border-color: var(--accent-gold); }
+        .faction-image-container:hover img { filter: grayscale(0%) contrast(105%); transform: scale(1.06); }
+
+        /* Többi régi bevált stílus (Űrlapok stb.) */
+        .auth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
+        .auth-box { background: var(--bg-card); padding: 50px; border-radius: 12px; border-top: 4px solid var(--accent-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        .auth-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(184, 144, 71, 0.05), transparent 60%); pointer-events: none; }
+        .auth-box.box-red { border-top-color: var(--accent-red); }
+        .auth-box.box-red::before { background: radial-gradient(circle at top right, rgba(191,33,47,0.05), transparent 60%); }
+        
+        .auth-box h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 30px; letter-spacing: 1px; }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-gray); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); padding: 15px; color: #fff; border-radius: 6px; font-family: inherit; transition: var(--transition); }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent-red); background: rgba(0,0,0,0.8); box-shadow: 0 0 15px rgba(191,33,47,0.2); }
+        
+        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent-gold) 0%, #8b6c31 100%); color: #fff; border: none; font-weight: 700; text-transform: uppercase; border-radius: 6px; transition: var(--transition); margin-bottom: 15px; letter-spacing: 2px; font-size: 0.9rem; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(184, 144, 71, 0.3); }
+        .btn-red { background: linear-gradient(135deg, var(--accent-red) 0%, #7a121a 100%); }
+        .btn-red:hover { box-shadow: 0 10px 20px rgba(191,33,47,0.3); }
+
+        .status-banner { background: var(--bg-card); padding: 40px; border-left: 4px solid var(--accent-gold); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .badge { padding: 10px 20px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .badge.pending { background: rgba(234,179,8,0.15); color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+        .badge.approved { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+        .badge.rejected { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+        .admin-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
+        .admin-list { background: var(--bg-card); padding: 30px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .app-item { padding: 20px; background: rgba(0,0,0,0.4); margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); transition: var(--transition); position: relative; overflow: hidden; }
+        .app-item::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 3px; background: transparent; transition: var(--transition); }
+        .app-item:hover, .app-item.selected { border-color: rgba(191,33,47,0.3); background: rgba(191,33,47,0.05); transform: translateX(5px); }
+        .app-item:hover::before, .app-item.selected::before { background: var(--accent-red); }
+        .admin-content { background: var(--bg-card); padding: 50px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .qa-box { margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 25px; border-left: 2px solid var(--accent-gold); border-radius: 0 8px 8px 0; }
+        .qa-box h5 { color: var(--accent-gold); margin-bottom: 12px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        
+        .toast { position: fixed; bottom: 40px; right: 40px; padding: 20px 30px; background: #111; border-left: 4px solid var(--accent-red); z-index: 9999; transform: translateX(150%); transition: cubic-bezier(0.4, 0, 0.2, 1) 0.5s; font-weight: 600; box-shadow: 0 20px 40px rgba(0,0,0,0.8); border-radius: 4px; display: flex; align-items: center; gap: 15px; }
+        .toast.show { transform: translateX(0); }
+
+        .loader { display: none; margin: 30px auto; width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.05); border-top: 3px solid var(--accent-red); border-radius: 50%; animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media(max-width: 1000px) { .auth-container, .story-grid, .admin-grid { grid-template-columns: 1fr; } .title-large { font-size: 3rem; } }
+    /* Lábléc stílus */
+footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(3, 3, 5, 0.95); text-align: center; color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px; margin-top: 50px; }
+.dev-highlight { color: var(--accent-gold); font-weight: 600; }
+.security-badge { margin-top: 15px; display: inline-block; padding: 5px 15px; background: rgba(191, 33, 47, 0.05); border: 1px solid rgba(191, 33, 47, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--accent-red); }
+</style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- Kurzoreffektek -->
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+    <div class="custom-cursor-outline" id="cursor-outline"></div>
+
+    <!-- Menü -->
+    <nav>
+        <div class="logo">Playboys<span>.</span></div>
+        <ul class="nav-links">
+            <li><a href="#" class="nav-btn active" data-target="home-view">Főoldal</a></li>
+            <li><a href="#" class="nav-btn" id="nav-status" data-target="status-view" style="display:none;">TGF Állapota</a></li>
+            <li><a href="#" class="nav-btn" id="nav-admin" data-target="admin-view" style="display:none;">Admin Panel</a></li>
+            <li><a href="#" class="nav-btn" id="nav-auth" data-target="auth-view">Bejelentkezés</a></li>
+            <li><a href="#" class="nav-btn" id="nav-logout" style="display:none;" onclick="logout()">Kijelentkezés</a></li>
+            <li><a href="#" class="nav-btn btn-tgf" data-target="tgf-view">Tagfelvétel</a></li>
+        </ul>
+    </nav>
+
+    <div class="toast" id="toast">Értesítés</div>
+
+    <!-- 1. FŐOLDAL -->
+    <div class="view-section active-view" id="home-view">
+        <div class="story-grid">
+            <div class="story-content">
+                <h1 class="title-large">A Playboys<br><span>Története</span></h1>
+                <p class="subtitle">Becsület, összetartás és lojalitás.</p>
+                
+                <div class="story-text">
+                    <p>A Playboys története akkor kezdődött, amikor a két féltestvér, Tóth István és Száva Vince, akik a család vezetői, elhatározták, hogy létrehoznak egy saját bűnszervezetet. Mindketten szegénységben nőttek fel, és gyerekkoruktól kezdve megtanulták, hogy csak egymásra számíthatnak. A család összetartása mindig erősebb volt minden nehézségnél.</p>
+                    <p>Amikor elég tapasztalatot szereztek, magasabb szintre léptek. Bankok kifosztását kezdték el tervezni. Higgadtak maradtak a legnagyobb nyomás alatt is. Ennek köszönhetően több sikeres bankrablást is végrehajtottak, amelyek után jelentős vagyonra tettek szert. A Playboys azonban sosem felejtette el, honnan indult. Minden rablásból származó pénz felét a szegényeknek adományozták.</p>
+                    <p>A megszerzett vagyonból fokozatosan átvették az irányítást a város egy kisebb része felett. Az ott élők tudták, hogy azon a környéken a Playboys szava dönt. A családtagok között a hűség volt a legfontosabb szabály, és aki ezt megszegte, annak nem maradt helye közöttük. A Playboys számára a becsület minden pénznél többet ér.</p>
+                </div>
+            </div>
+            
+            <!-- Letisztult, lebegő kép -->
+            <div class="faction-image-container">
+                <img src="playboys1.png" alt="Playboys Syndicate">
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. BEJELENTKEZÉS / REGISZTRÁCIÓ -->
+    <div class="view-section" id="auth-view">
+        <div style="text-align: center; margin-bottom: 50px;">
+            <h1 class="title-large">Belépési <span>Központ</span></h1>
+            <p class="subtitle">Azonosítsd magad a hálózaton</p>
+        </div>
+        <div class="loader" id="auth-loader"></div>
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Bejelentkezés</h2>
+                <div class="form-group">
+                    <label>Azonosító (IC név vagy Leader név)</label>
+                    <input type="text" id="login-name" placeholder="Pl.: Kis_Pista vagy dxniieznemkerdes">
+                </div>
+                <div class="form-group">
+                    <label>Jelszó</label>
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                </div>
+                <button class="btn-submit" onclick="handleAuth('login', 'player')">Játékos Belépés</button>
+                <button class="btn-submit btn-red" onclick="handleAuth('login', 'leader')">Leader Belépés</button>
+            </div>
+
+            <div class="auth-box box-red">
+                <h2>Játékos Regisztráció</h2>
+                <div class="form-group">
+                    <label>IC Neved (Pontosan!)</label>
+                    <input type="text" id="reg-name" placeholder="Pl.: Kovacs_Janos">
+                </div>
+                <div class="form-group">
+                    <label>Jelszó</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Discord Neved</label>
+                    <input type="text" id="reg-dc" placeholder="Pl.: pista99">
+                </div>
+                <button class="btn-submit btn-red" onclick="handleAuth('register', 'player')">Fiók Létrehozása</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. TAGFELVÉTEL -->
+    <div class="view-section" id="tgf-view">
+        <h1 class="title-large">Tagfelvételi <span>Lap</span></h1>
+        <p class="subtitle">Bizonyítsd be, hogy helyed van a családban</p>
+        
+        <div id="tgf-guest-msg" class="auth-box" style="text-align: center; max-width: 600px; margin: 50px auto;">
+            <h3 style="margin-bottom: 15px; color: var(--accent-red);">Hozzáférés megtagadva</h3>
+            <p style="color: var(--text-gray);">Kérlek jelentkezz be, vagy regisztrálj a lap kitöltéséhez!</p>
+        </div>
+
+        <div id="tgf-form-container" class="auth-box box-red" style="display:none; max-width: 900px; margin: 0 auto;">
+            <div class="form-group">
+                <label>1. Mutatkozz be pár mondatban (OOC, kor, tapasztalat)</label>
+                <textarea id="tgf-q1" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label>2. Miért a Playboys frakciót választottad?</label>
+                <textarea id="tgf-q2" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label>3. Fejtsd ki a fogalmakat: MG, RK, MetaGaming szabályok illegálként.</label>
+                <textarea id="tgf-q3" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label>4. Mi az az NRK?</label>
+                <textarea id="tgf-q4" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label>5. Mi az a DM?</label>
+                <textarea id="tgf-q5" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label>6. Mi az a PG?</label>
+                <textarea id="tgf-q6" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label>7. Mit tennél hozzá a frakciónkhoz?</label>
+                <textarea id="tgf-q7" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>8. Milyen az RP-d? Dara vagy inkább RPs?</label>
+                <textarea id="tgf-q8" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label>9. Vannak saját fegyvereid vagy a frakciónkból vennél el?</label>
+                <textarea id="tgf-q9" rows="2"></textarea>
+            </div>
+            <div class="loader" id="tgf-loader"></div>
+            <button class="btn-submit btn-red" style="margin-top: 20px;" onclick="submitTgf()">Jelentkezés Beküldése</button>
+        </div>
+    </div>
+
+    <!-- 4. ÁLLAPOT -->
+    <div class="view-section" id="status-view">
+        <h1 class="title-large">Jelentkezésem <span>Állapota</span></h1>
+        <p class="subtitle">A vezetőség döntése</p>
+        <div class="loader" id="status-loader"></div>
+        <div id="status-content" style="max-width: 800px; margin: 0 auto;"></div>
+    </div>
+
+    <!-- 5. ADMIN PANEL -->
+    <div class="view-section" id="admin-view">
+        <h1 class="title-large">Leader <span>Központ</span></h1>
+        <p class="subtitle">Bizalmas dokumentumok bírálata</p>
+        
+        <div class="admin-grid">
+            <div class="admin-list" id="admin-list">
+                <p style="color:var(--text-gray);">Lapok betöltése folyamatban...</p>
+            </div>
+            <div class="admin-content" id="admin-content">
+                <div style="height: 100%; display: flex; align-items: center; justify-content: center; opacity: 0.5;">
+                    <h3 style="color:var(--text-gray); font-weight: 400; letter-spacing: 1px;">Válassz ki egy aktát a bal oldali listából.</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzOqgAleqO6pcW03swoKTc73c4WOaAART3IMaQs1y2H5ZaSADfBz4eI00jGEyc2HJBm/exec";
+        
+        let currentUser = JSON.parse(localStorage.getItem('pb_user')) || null;
+
+        // Finomított Kurzor követés
+        document.addEventListener('mousemove', (e) => {
+            document.getElementById('cursor-dot').style.left = e.clientX + 'px';
+            document.getElementById('cursor-dot').style.top = e.clientY + 'px';
+            document.getElementById('cursor-outline').animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 150, fill: "forwards" });
+        });
+
+        // Interaktív link kurzor effekt
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.getElementById('cursor-outline').style.transform = 'translate(-50%, -50%) scale(1.5)';
+                document.getElementById('cursor-outline').style.borderColor = 'var(--accent-red)';
+            });
+            el.addEventListener('mouseleave', () => {
+                document.getElementById('cursor-outline').style.transform = 'translate(-50%, -50%) scale(1)';
+                document.getElementById('cursor-outline').style.borderColor = 'rgba(184, 144, 71, 0.5)';
+            });
+        });
+
+        // Navigáció vezérlés
+        const views = document.querySelectorAll('.view-section');
+        const btns = document.querySelectorAll('.nav-btn');
+        function switchView(id) {
+            views.forEach(v => {
+                v.classList.remove('active-view');
+                v.style.animation = 'none'; // reset animation
+                v.offsetHeight; /* trigger reflow */
+            });
+            const active = document.getElementById(id);
+            active.classList.add('active-view');
+            active.style.animation = 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+            
+            btns.forEach(b => b.classList.toggle('active', b.getAttribute('data-target') === id));
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            
+            if(id === 'status-view') loadStatus();
+            if(id === 'admin-view') loadAdmin();
+        }
+        
+        btns.forEach(b => b.addEventListener('click', e => {
+            if(b.getAttribute('data-target')) { e.preventDefault(); switchView(b.getAttribute('data-target')); }
+        }));
+
+        // Toast értesítések
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerHTML = `<span style="font-size: 1.2rem;">⚡</span> ${msg}`;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+
+        // Felület frissítése bejelentkezési státusz alapján
+        function updateUI() {
+            if(currentUser) {
+                document.getElementById('nav-auth').style.display = 'none';
+                document.getElementById('nav-logout').style.display = 'block';
+                document.getElementById('nav-status').style.display = 'block';
+                document.getElementById('tgf-guest-msg').style.display = 'none';
+                document.getElementById('tgf-form-container').style.display = 'block';
+                document.getElementById('nav-admin').style.display = currentUser.role === 'admin' ? 'block' : 'none';
+            } else {
+                document.getElementById('nav-auth').style.display = 'block';
+                document.getElementById('nav-logout').style.display = 'none';
+                document.getElementById('nav-status').style.display = 'none';
+                document.getElementById('nav-admin').style.display = 'none';
+                document.getElementById('tgf-guest-msg').style.display = 'block';
+                document.getElementById('tgf-form-container').style.display = 'none';
+            }
+        }
+
+        // API motor
+        async function fetchAPI(data) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                });
+                return await response.json();
+            } catch(e) {
+                console.error("Fetch hiba:", e);
+                return { success: false, message: "Hálózati hiba. Az adatbázis nem elérhető." };
+            }
+        }
+
+        // Hitelesítési folyamatok
+        async function handleAuth(action, type) {
+            document.getElementById('auth-loader').style.display = 'block';
+            let data = { action: action, type: type };
+            
+            if(action === 'login') {
+                data.username = document.getElementById('login-name').value.trim();
+                data.password = document.getElementById('login-pass').value;
+            } else {
+                data.username = document.getElementById('reg-name').value.trim();
+                data.password = document.getElementById('reg-pass').value;
+                data.discord_name = document.getElementById('reg-dc').value.trim();
+            }
+
+            if(!data.username || !data.password) {
+                showToast("Minden mezőt kötelező kitölteni!");
+                document.getElementById('auth-loader').style.display = 'none';
+                return;
+            }
+
+            const res = await fetchAPI(data);
+            document.getElementById('auth-loader').style.display = 'none';
+            showToast(res.message);
+
+            if(res.success && action === 'login') {
+                currentUser = res.user;
+                localStorage.setItem('pb_user', JSON.stringify(currentUser));
+                updateUI();
+                switchView('home-view');
+            }
+        }
+
+        function logout() {
+            currentUser = null; localStorage.removeItem('pb_user');
+            updateUI(); showToast("Sikeresen kijelentkeztél."); switchView('home-view');
+        }
+
+        // Lap beküldés
+        async function submitTgf() {
+            const data = {
+                action: "submitTgf",
+                username: currentUser.username,
+                q1: document.getElementById('tgf-q1').value.trim(),
+                q2: document.getElementById('tgf-q2').value.trim(),
+                q3: document.getElementById('tgf-q3').value.trim(),
+                q4: document.getElementById('tgf-q4').value.trim(),
+                q5: document.getElementById('tgf-q5').value.trim(),
+                q6: document.getElementById('tgf-q6').value.trim(),
+                q7: document.getElementById('tgf-q7').value.trim(),
+                q8: document.getElementById('tgf-q8').value.trim(),
+                q9: document.getElementById('tgf-q9').value.trim()
+            };
+
+            if(!data.q1 || !data.q2 || !data.q3) return showToast("Minden kérdés megválaszolása kötelező!");
+
+            document.getElementById('tgf-loader').style.display = 'block';
+            const res = await fetchAPI(data);
+            document.getElementById('tgf-loader').style.display = 'none';
+            
+            showToast(res.message);
+            if(res.success) {
+                // Mezők ürítése
+                for(let i=1; i<=9; i++) document.getElementById('tgf-q' + i).value = '';
+                switchView('status-view');
+            }
+        }
+
+        // Státusz betöltése
+        async function loadStatus() {
+            const box = document.getElementById('status-content');
+            document.getElementById('status-loader').style.display = 'block';
+            box.innerHTML = '';
+            
+            const res = await fetchAPI({ action: "getStatus", username: currentUser.username });
+            document.getElementById('status-loader').style.display = 'none';
+
+            if(res.hasApp) {
+                let cl = res.status === 'Elfogadva' ? 'approved' : (res.status === 'Elutasítva' ? 'rejected' : 'pending');
+                box.innerHTML = `
+                    <div class="status-banner">
+                        <div>
+                            <h3 style="font-size:1.5rem; margin-bottom: 8px;">Azonosító: <span style="color:#fff;">${currentUser.username}</span></h3>
+                            <p style="color:var(--text-gray); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Aktuális státusz</p>
+                        </div>
+                        <div class="badge ${cl}">${res.status}</div>
+                    </div>
+                    ${res.reason ? `<div class="auth-box box-red" style="margin-top:30px;"><h3 style="color:var(--accent-red); margin-bottom: 10px;">Vezetőségi Indoklás:</h3><p style="line-height: 1.8; color: #fff;">${res.reason}</p></div>` : ''}
+                `;
+            } else {
+                box.innerHTML = `<div class="auth-box" style="text-align: center;"><h3>Még nem adtál le jelentkezési lapot!</h3><p style="color: var(--text-gray); margin-top: 10px;">Látogass el a Tagfelvétel menüpontba.</p></div>`;
+            }
+        }
+
+        // Adminisztrációs felület kezelése
+        async function loadAdmin() {
+            const list = document.getElementById('admin-list');
+            list.innerHTML = 'Akták keresése...';
+            const res = await fetchAPI({ action: "getAdminApps" });
+            
+            if(res.success && res.apps.length > 0) {
+                list.innerHTML = '<h3 style="margin-bottom: 20px; font-family: Playfair Display; color: #fff;">Függőben lévő akták</h3>';
+                res.apps.forEach(app => {
+                    const d = document.createElement('div');
+                    d.className = 'app-item';
+                    d.innerHTML = `<h4 style="margin-bottom: 5px; color: #fff; letter-spacing: 1px;">${app.username}</h4><span style="color:var(--accent-gold); font-size:0.75rem; text-transform: uppercase; font-weight: 700;">${app.status}</span>`;
+                    d.onclick = () => showAppDetail(app, d);
+                    list.appendChild(d);
+                });
+            } else {
+                list.innerHTML = '<p style="color:var(--text-gray);">Nincs új jelentkező.</p>';
+                document.getElementById('admin-content').innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center;"><h3 style="color:var(--text-gray); font-weight: 400;">Minden akta feldolgozva.</h3></div>';
+            }
+        }
+
+        function showAppDetail(app, elem) {
+            document.querySelectorAll('.app-item').forEach(el => el.classList.remove('selected'));
+            elem.classList.add('selected');
+            
+            document.getElementById('admin-content').innerHTML = `
+                <h2 style="font-family:'Playfair Display'; font-size: 2.5rem; margin-bottom:30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">Jelentkező: <span style="color: var(--accent-red);">${app.username}</span></h2>
+                
+                <div class="qa-box"><h5>1. Bemutatkozás</h5><p style="line-height: 1.8;">${app.q1}</p></div>
+                <div class="qa-box"><h5>2. Miért a Playboys?</h5><p style="line-height: 1.8;">${app.q2}</p></div>
+                <div class="qa-box"><h5>3. RP Szabályok</h5><p style="line-height: 1.8;">${app.q3}</p></div>
+                
+                <div style="margin-top:40px; background: rgba(0,0,0,0.5); padding: 30px; border-radius: 8px; border: 1px solid rgba(191,33,47,0.2);">
+                    <h4 style="margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Vezetőségi Döntés</h4>
+                    <input type="text" id="admin-reason" placeholder="Indoklás csatolása (Elutasításnál kötelező)" style="width:100%; padding:15px; background:rgba(0,0,0,0.8); color:#fff; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px; border-radius:6px; font-family: inherit;">
+                    <div style="display:flex; gap:20px;">
+                        <button class="btn-submit" style="background: linear-gradient(135deg, #16a34a 0%, #14532d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elfogadva')">✓ Elfogadás</button>
+                        <button class="btn-submit" style="background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elutasítva')">✕ Elutasítás</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function review(appId, status) {
+            const reason = document.getElementById('admin-reason').value.trim();
+            if(status === 'Elutasítva' && !reason) return showToast("Elutasítás esetén az indoklás megadása kötelező!");
+            
+            showToast("Határozat továbbítása a hálózaton...");
+            const res = await fetchAPI({ action: "reviewApp", appId, status, reason });
+            showToast(res.message);
+            if(res.success) {
+                document.getElementById('admin-content').innerHTML = '<div style="height: 100%; display: flex; align-items: center; justify-content: center;"><h3 style="color:var(--text-gray); font-weight: 400;">Akta lezárva. Válassz egy újat.</h3></div>';
+                loadAdmin();
+            }
+        }
+
+        updateUI();
+    </script>
+<footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Playboys Syndicate. Minden jog fenntartva.</p>
+            <p>Webfejlesztő discordja: <span class="dev-highlight">xmatee.</span></p>
+            <div class="security-badge">🔒 Adatbázis jelszavak titkosítva vannak</div>
+        </div>
+    </footer>
+</body>
+</html>
