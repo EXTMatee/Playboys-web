@@ -455,7 +455,7 @@
             showToast(res.message); loadAdmin();
         }
 
-        // --- MÓDOSÍTOTT GALÉRIA BETÖLTÉS ---
+       // --- MÓDOSÍTOTT GALÉRIA BETÖLTÉS ---
         async function loadGallery() {
             const loader = document.getElementById('gallery-loader');
             if(loader) loader.style.display = 'block';
@@ -467,26 +467,46 @@
                 const fullContainer = document.getElementById('full-gallery-container');
                 const miniContainer = document.getElementById('mini-gallery-container');
                 
-                let htmlContent = '';
+                // Generáljuk a teljes galéria tartalmát
+                let fullHtml = '';
                 res.media.forEach(item => {
-                    let isImage = !item.url.includes('youtube') && !item.url.includes('.mp4');
-                    let enlargeBtn = isImage ? `<button class="enlarge-btn" onclick="openModal('${item.url}', '${item.title}')">🔍 Nagyítás</button>` : '';
-                    
-                    htmlContent += `
-                        <div class="gallery-item">
-                            ${getMediaTag(item.url, item.title, false)}
-                            <div class="gallery-caption">${item.title}</div>
-                            ${enlargeBtn}
-                        </div>
-                    `;
+                    fullHtml += createGalleryItemHTML(item);
                 });
-                if(fullContainer) fullContainer.innerHTML = htmlContent;
-                if(miniContainer) miniContainer.innerHTML = htmlContent.split('</div>').slice(0, 3).join('</div>') + '</div>';
+                if(fullContainer) fullContainer.innerHTML = fullHtml;
+
+                // Generáljuk a mini galéria tartalmát (az első 3 elem)
+                if(miniContainer) {
+                    let miniHtml = '';
+                    res.media.slice(0, 3).forEach(item => {
+                        miniHtml += createGalleryItemHTML(item);
+                    });
+                    miniContainer.innerHTML = miniHtml;
+                }
                 
                 // TILTE EFFEKT BEINDÍTÁSA
                 applyTiltEffect('full-gallery-container');
                 applyTiltEffect('mini-gallery-container');
             }
+        }
+        
+        // Segédfüggvény a kód tisztán tartásához
+        function createGalleryItemHTML(item) {
+            let isImage = !item.url.includes('youtube') && !item.url.includes('.mp4');
+            let enlargeBtn = isImage ? `<button class="enlarge-btn" onclick="openModal('${item.url}', '${item.title}')">🔍 Nagyítás</button>` : '';
+            
+            return `
+                <div class="gallery-item">
+                    ${getMediaTag(item.url, item.title, false)}
+                    <div class="gallery-caption">${item.title}</div>
+                    ${enlargeBtn}
+                </div>
+            `;
+        }
+
+        function getMediaTag(url, title, isMini) {
+             if(url.includes('youtube')) return `<iframe src="https://www.youtube.com/embed/${url.split('v=')[1]||url.split('/').pop()}"></iframe>`;
+             if(url.includes('.mp4')) return `<video src="${url}" controls></video>`;
+             return `<img src="${url}" alt="${title}">`;
         }
         
         function getMediaTag(url, title, isMini) {
