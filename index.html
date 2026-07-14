@@ -19,7 +19,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
         body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Montserrat', sans-serif; overflow-x: hidden; scroll-behavior: smooth; background-image: radial-gradient(circle at 50% 0%, rgba(191,33,47,0.05) 0%, transparent 50%); }
         
-        /* Dinamikus háttér izzás */
         .bg-glow { position: absolute; top: -20%; left: -10%; width: 800px; height: 800px; background: radial-gradient(circle, rgba(191,33,47,0.06) 0%, rgba(0,0,0,0) 60%); z-index: -1; pointer-events: none; filter: blur(50px); animation: pulseGlow 8s infinite alternate; }
         @keyframes pulseGlow { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
         
@@ -27,7 +26,6 @@
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: var(--accent-red); border-radius: 4px; }
         
-        /* Egyedi kurzor */
         .custom-cursor-dot { width: 6px; height: 6px; background-color: var(--accent-red); position: fixed; pointer-events: none; z-index: 10000; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--accent-red); }
         .custom-cursor-outline { width: 45px; height: 45px; border: 1px solid rgba(184, 144, 71, 0.5); position: fixed; pointer-events: none; z-index: 9999; border-radius: 50%; transform: translate(-50%, -50%); transition: transform 0.15s ease-out, border-color 0.3s; }
 
@@ -47,28 +45,20 @@
         .view-section.active-view { display: block; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Felturbózott tipográfia */
         .title-large { font-family: 'Playfair Display', serif; font-size: 4.5rem; text-transform: uppercase; margin-bottom: 10px; line-height: 1; letter-spacing: -2px; background: linear-gradient(to bottom right, #ffffff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .title-large span { background: linear-gradient(to bottom right, #ff4d4d, var(--accent-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 25px rgba(191,33,47,0.4)); }
         .subtitle { color: var(--accent-gold); font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; margin-bottom: 40px; letter-spacing: 2px; }
 
-        /* Brutális Főoldal Elrendezés */
         .story-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; }
-        
         .story-content { background: rgba(10, 10, 13, 0.6); padding: 50px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); backdrop-filter: blur(20px); box-shadow: inset 0 0 0 1px rgba(184, 144, 71, 0.1), 0 30px 60px rgba(0,0,0,0.8); position: relative; }
         .story-content::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100px; background: var(--accent-red); border-top-left-radius: 16px; }
-        
         .story-text p { margin-bottom: 25px; line-height: 2; color: var(--text-gray); text-align: justify; font-size: 1.05rem; font-weight: 400; }
         .story-text p:first-of-type { color: #fff; font-size: 1.15rem; font-weight: 500; border-left: 2px solid var(--accent-gold); padding-left: 20px; font-style: italic; }
         
-        /* Új, lüktető Kép Tároló Dizájn */
         .faction-image-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 40px rgba(191,33,47,0.15); background: #000; animation: floatImg 6s ease-in-out infinite; transition: var(--transition); }
         .faction-image-container::after { content: ''; position: absolute; inset: 0; border: 2px solid rgba(191,33,47,0.2); border-radius: 12px; pointer-events: none; transition: var(--transition); }
         .faction-image-container img { width: 100%; height: auto; display: block; filter: grayscale(30%) contrast(110%); transition: var(--transition); transform: scale(1.02); }
-        
         @keyframes floatImg { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* Kép Hover Effektek */
         .faction-image-container:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 60px rgba(191,33,47,0.4); }
         .faction-image-container:hover::after { border-color: var(--accent-gold); }
         .faction-image-container:hover img { filter: grayscale(0%) contrast(105%); transform: scale(1.06); }
@@ -82,13 +72,15 @@
         .gallery-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 15px 15px; background: linear-gradient(transparent, rgba(0,0,0,0.95)); color: #fff; font-size: 0.9rem; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none; text-align: left; }
         .gallery-date { font-size: 0.7rem; color: var(--accent-gold); display: block; margin-top: 3px; text-transform: uppercase; font-weight: 500; }
 
-        /* Többi régi bevált stílus (Űrlapok stb.) */
+        /* KÉP NAGYÍTÁS GOMB */
+        .enlarge-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(191,33,47,0.8); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; z-index: 10; transition: var(--transition); text-transform: uppercase; font-weight: 700; pointer-events: auto; }
+        .enlarge-btn:hover { background: var(--accent-gold); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); color: #000; }
+
         .auth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
         .auth-box { background: var(--bg-card); padding: 50px; border-radius: 12px; border-top: 4px solid var(--accent-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
         .auth-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(184, 144, 71, 0.05), transparent 60%); pointer-events: none; }
         .auth-box.box-red { border-top-color: var(--accent-red); }
         .auth-box.box-red::before { background: radial-gradient(circle at top right, rgba(191,33,47,0.05), transparent 60%); }
-        
         .auth-box h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 30px; letter-spacing: 1px; }
 
         .form-group { margin-bottom: 25px; }
@@ -125,7 +117,6 @@
 
         @media(max-width: 1000px) { .auth-container, .story-grid, .admin-grid { grid-template-columns: 1fr; } .title-large { font-size: 3rem; } }
         
-        /* Lábléc stílus */
         footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(3, 3, 5, 0.95); text-align: center; color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px; margin-top: 50px; }
         .dev-highlight { color: var(--accent-gold); font-weight: 600; }
         .security-badge { margin-top: 15px; display: inline-block; padding: 5px 15px; background: rgba(191, 33, 47, 0.05); border: 1px solid rgba(191, 33, 47, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--accent-red); }
@@ -134,7 +125,6 @@
 <body>
 
     <div class="bg-glow"></div>
-
     <div class="custom-cursor-dot" id="cursor-dot"></div>
     <div class="custom-cursor-outline" id="cursor-outline"></div>
 
@@ -154,6 +144,14 @@
 
     <div class="toast" id="toast">Értesítés</div>
 
+    <!-- KÉP NAGYÍTÓ MODAL (ÚJ FUNKCIÓ) -->
+    <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9000; justify-content:center; align-items:center; flex-direction:column; backdrop-filter: blur(10px);">
+        <span style="position:absolute; top:30px; right:50px; color:var(--text-gray); font-size:50px; font-weight:300; transition: var(--transition);" onmouseover="this.style.color='var(--accent-red)'" onmouseout="this.style.color='var(--text-gray)'" onclick="closeModal()">&times;</span>
+        <img id="modal-img" style="max-width:90%; max-height:80%; border-radius:8px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.05);">
+        <div id="modal-caption" style="color:#fff; margin-top:20px; font-size:1.2rem; font-family:'Playfair Display', serif; letter-spacing: 1px; text-transform: uppercase;"></div>
+    </div>
+
+    <!-- 1. FŐOLDAL -->
     <div class="view-section active-view" id="home-view">
         <div class="story-grid">
             <div class="story-content">
@@ -176,11 +174,13 @@
             <h2 class="title-large" style="font-size: 2.5rem;">Kiemelt <span>Pillanatok</span></h2>
             <p class="subtitle" style="margin-bottom: 30px;">Legújabb felvételek a szerverről</p>
             <div class="gallery-grid" id="mini-gallery-container" style="margin-bottom: 40px;">
-                </div>
+                <!-- Ide tölt be 3 képet a JS -->
+            </div>
             <button class="btn-submit btn-red" style="width: auto; padding: 12px 35px;" onclick="switchView('gallery-view')">Tovább a teljes archívumba ➔</button>
         </div>
     </div>
 
+    <!-- 2. GALÉRIA NÉZET -->
     <div class="view-section" id="gallery-view">
         <h1 class="title-large">Családi <span>Archívum</span></h1>
         <p class="subtitle">Emlékek a hálózatból</p>
@@ -202,9 +202,11 @@
 
         <div class="loader" id="gallery-loader"></div>
         <div class="gallery-grid" id="full-gallery-container">
-            </div>
+            <!-- Ide töltődnek a képek az API-ból -->
+        </div>
     </div>
 
+    <!-- 3. BEJELENTKEZÉS / REGISZTRÁCIÓ -->
     <div class="view-section" id="auth-view">
         <div style="text-align: center; margin-bottom: 50px;">
             <h1 class="title-large">Belépési <span>Központ</span></h1>
@@ -245,6 +247,7 @@
         </div>
     </div>
 
+    <!-- 4. TAGFELVÉTEL -->
     <div class="view-section" id="tgf-view">
         <h1 class="title-large">Tagfelvételi <span>Lap</span></h1>
         <p class="subtitle">Bizonyítsd be, hogy helyed van a családban</p>
@@ -296,6 +299,7 @@
         </div>
     </div>
 
+    <!-- 5. ÁLLAPOT -->
     <div class="view-section" id="status-view">
         <h1 class="title-large">Jelentkezésem <span>Állapota</span></h1>
         <p class="subtitle">A vezetőség döntése</p>
@@ -303,6 +307,7 @@
         <div id="status-content" style="max-width: 800px; margin: 0 auto;"></div>
     </div>
 
+    <!-- 6. ADMIN PANEL -->
     <div class="view-section" id="admin-view">
         <h1 class="title-large">Leader <span>Központ</span></h1>
         <p class="subtitle">Bizalmas dokumentumok bírálata</p>
@@ -319,20 +324,18 @@
         </div>
     </div>
 
+    <!-- JAVASCRIPT -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzOqgAleqO6pcW03swoKTc73c4WOaAART3IMaQs1y2H5ZaSADfBz4eI00jGEyc2HJBm/exec";
-        
         let currentUser = JSON.parse(localStorage.getItem('pb_user')) || null;
 
-        // Finomított Kurzor követés
         document.addEventListener('mousemove', (e) => {
             document.getElementById('cursor-dot').style.left = e.clientX + 'px';
             document.getElementById('cursor-dot').style.top = e.clientY + 'px';
             document.getElementById('cursor-outline').animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 150, fill: "forwards" });
         });
 
-        // Interaktív link kurzor effekt
-        document.querySelectorAll('a, button').forEach(el => {
+        document.querySelectorAll('a, button, span').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.getElementById('cursor-outline').style.transform = 'translate(-50%, -50%) scale(1.5)';
                 document.getElementById('cursor-outline').style.borderColor = 'var(--accent-red)';
@@ -343,14 +346,13 @@
             });
         });
 
-        // Navigáció vezérlés
         const views = document.querySelectorAll('.view-section');
         const btns = document.querySelectorAll('.nav-btn');
         function switchView(id) {
             views.forEach(v => {
                 v.classList.remove('active-view');
-                v.style.animation = 'none'; // reset animation
-                v.offsetHeight; /* trigger reflow */
+                v.style.animation = 'none'; 
+                v.offsetHeight; 
             });
             const active = document.getElementById(id);
             active.classList.add('active-view');
@@ -368,7 +370,6 @@
             if(b.getAttribute('data-target')) { e.preventDefault(); switchView(b.getAttribute('data-target')); }
         }));
 
-        // Toast értesítések
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.innerHTML = `<span style="font-size: 1.2rem;">⚡</span> ${msg}`;
@@ -376,7 +377,6 @@
             setTimeout(() => t.classList.remove('show'), 4000);
         }
 
-        // Felület frissítése bejelentkezési státusz alapján
         function updateUI() {
             const userDisplay = document.getElementById('logged-in-user');
             if(currentUser) {
@@ -404,10 +404,9 @@
                 document.getElementById('tgf-form-container').style.display = 'none';
                 if(userDisplay) userDisplay.style.display = 'none';
             }
-            loadGallery(); // Képek automatikus letöltése / inicializálása
+            loadGallery(); 
         }
 
-        // API motor
         async function fetchAPI(data) {
             try {
                 const response = await fetch(API_URL, {
@@ -417,12 +416,10 @@
                 });
                 return await response.json();
             } catch(e) {
-                console.error("Fetch hiba:", e);
                 return { success: false, message: "Hálózati hiba. Az adatbázis nem elérhető." };
             }
         }
 
-        // Hitelesítési folyamatok
         async function handleAuth(action, type) {
             document.getElementById('auth-loader').style.display = 'block';
             let data = { action: action, type: type };
@@ -459,7 +456,6 @@
             updateUI(); showToast("Sikeresen kijelentkeztél."); switchView('home-view');
         }
 
-        // Lap beküldés
         async function submitTgf() {
             const data = {
                 action: "submitTgf",
@@ -483,13 +479,11 @@
             
             showToast(res.message);
             if(res.success) {
-                // Mezők ürítése
                 for(let i=1; i<=9; i++) document.getElementById('tgf-q' + i).value = '';
                 switchView('status-view');
             }
         }
 
-        // Státusz betöltése
         async function loadStatus() {
             const box = document.getElementById('status-content');
             document.getElementById('status-loader').style.display = 'block';
@@ -515,7 +509,6 @@
             }
         }
 
-        // Adminisztrációs felület kezelése
         async function loadAdmin() {
             const list = document.getElementById('admin-list');
             list.innerHTML = 'Akták keresése...';
@@ -543,7 +536,7 @@
             document.getElementById('admin-content').innerHTML = `
                 <h2 style="font-family:'Playfair Display'; font-size: 2.5rem; margin-bottom:30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">Jelentkező: <span style="color: var(--accent-red);">${app.username}</span></h2>
                 
-                <div class="qa-box"><h5>1. Mutatkozz be pár mondatban (OOC, kor, tapasztalat)</h5><p style="line-height: 1.8;">${app.q1}</p></div>
+                <div class="qa-box"><h5>1. Mutatkozz be pár mondatban</h5><p style="line-height: 1.8;">${app.q1}</p></div>
                 <div class="qa-box"><h5>2. Miért a Playboys frakciót választottad?</h5><p style="line-height: 1.8;">${app.q2}</p></div>
                 <div class="qa-box"><h5>3. Fejtsd ki a fogalmakat: MG, RK, MetaGaming szabályok illegálként.</h5><p style="line-height: 1.8;">${app.q3}</p></div>
                 <div class="qa-box"><h5>4. Mi az az NRK?</h5><p style="line-height: 1.8;">${app.q4}</p></div>
@@ -577,7 +570,19 @@
             }
         }
 
-        // GALÉRIA RENDSZER KEZELÉSE (ÚJ)
+        // --- ÚJ FUNKCIÓK: MODAL (NAGYÍTÁS) ---
+        function openModal(url, title) {
+            document.getElementById('modal-img').src = url;
+            document.getElementById('modal-caption').innerText = title || 'Archív felvétel';
+            document.getElementById('image-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('image-modal').style.display = 'none';
+            document.getElementById('modal-img').src = ''; 
+        }
+        // -------------------------------------
+
         async function uploadMedia() {
             const url = document.getElementById('media-url').value.trim();
             const title = document.getElementById('media-title').value.trim();
@@ -589,42 +594,26 @@
             if(res.success) {
                 document.getElementById('media-url').value = '';
                 document.getElementById('media-title').value = '';
-                loadGallery(); // Képek és videók újratöltése
+                loadGallery(); 
             }
         }
 
-        // Okos média HTML elem generáló (Kép, Videó, YouTube detektálással)
         function getMediaTag(url, title, isMini = false) {
-            // YouTube detektálás
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
                 let videoId = '';
                 try {
-                    if (url.includes('youtube.com/watch?v=')) {
-                        videoId = url.split('v=')[1].split('&')[0];
-                    } else if (url.includes('youtu.be/')) {
-                        videoId = url.split('youtu.be/')[1].split('?')[0];
-                    } else {
-                        videoId = url;
-                    }
-                } catch(e) {
-                    videoId = url;
-                }
+                    if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1].split('&')[0];
+                    else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+                    else videoId = url;
+                } catch(e) { videoId = url; }
                 
-                if (isMini) {
-                    // Főoldali kiemelt videókhoz a YouTube borítóképet töltjük be teljes iframe helyett a jobb teljesítményért
-                    return `<img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" alt="${title}" style="width:100%; height:100%; object-fit:cover;">`;
-                }
+                if (isMini) return `<img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" alt="${title}" style="width:100%; height:100%; object-fit:cover;">`;
                 return `<iframe src="https://www.youtube.com/embed/${videoId}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; border-radius: 8px;"></iframe>`;
             } 
-            // MP4 vagy egyéb videó formátumok
             else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.mov')) {
-                if (isMini) {
-                    // A főoldalon magától némítva lejátszódnak ciklusban (mint a GIF-ek)
-                    return `<video src="${url}" muted autoplay loop style="width:100%; height:100%; object-fit:cover;"></video>`;
-                }
+                if (isMini) return `<video src="${url}" muted autoplay loop style="width:100%; height:100%; object-fit:cover;"></video>`;
                 return `<video src="${url}" controls muted style="width:100%; height:100%; object-fit:cover;"></video>`;
             } 
-            // Alapértelmezett: Kép renderelése
             else {
                 return `<img src="${url}" alt="${title}" style="width:100%; height:100%; object-fit:cover;">`;
             }
@@ -641,6 +630,11 @@
                 let htmlContent = '';
                 res.media.forEach(item => {
                     let mediaTag = getMediaTag(item.url, item.title, false);
+                    
+                    // Ellenőrizzük, hogy ez csak kép-e, és ha igen, berakjuk a nagyítás gombot
+                    let isImage = !item.url.includes('youtube.com') && !item.url.includes('youtu.be') && !item.url.includes('.mp4') && !item.url.includes('.webm') && !item.url.includes('.mov');
+                    let enlargeBtn = isImage ? `<button class="enlarge-btn" onclick="openModal('${item.url}', '${item.title}')">🔍 Nagyítás</button>` : '';
+
                     htmlContent += `
                         <div class="gallery-item">
                             ${mediaTag}
@@ -648,6 +642,7 @@
                                 ${item.title || 'Archív felvétel'}
                                 <span class="gallery-date">Feltöltötte: ${item.uploader} | ${item.date}</span>
                             </div>
+                            ${enlargeBtn}
                         </div>
                     `;
                 });
@@ -655,12 +650,16 @@
                 const fullContainer = document.getElementById('full-gallery-container');
                 if (fullContainer) fullContainer.innerHTML = htmlContent;
                 
-                // Főoldali kiemelt galéria feltöltése (legújabb 3 darab)
                 const miniContainer = document.getElementById('mini-gallery-container');
                 if (miniContainer) {
                     const miniGalleryItems = res.media.slice(0, 3).map(item => {
                         let mediaTag = getMediaTag(item.url, item.title, true);
-                        return `<div class="gallery-item">${mediaTag}</div>`;
+                        
+                        // Főoldali kiemelt képekhez is hozzáadjuk a nagyítás gombot
+                        let isImage = !item.url.includes('youtube.com') && !item.url.includes('youtu.be') && !item.url.includes('.mp4') && !item.url.includes('.webm') && !item.url.includes('.mov');
+                        let enlargeBtn = isImage ? `<button class="enlarge-btn" onclick="openModal('${item.url}', '${item.title}')">🔍 Nagyítás</button>` : '';
+
+                        return `<div class="gallery-item">${mediaTag}${enlargeBtn}</div>`;
                     }).join('');
                     miniContainer.innerHTML = miniGalleryItems;
                 }
