@@ -73,6 +73,15 @@
         .faction-image-container:hover::after { border-color: var(--accent-gold); }
         .faction-image-container:hover img { filter: grayscale(0%) contrast(105%); transform: scale(1.06); }
 
+        /* GALÉRIA STÍLUSOK */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 30px; }
+        .gallery-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.5); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; }
+        .gallery-item img, .gallery-item video, .gallery-item iframe { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); opacity: 0.8; border: none; }
+        .gallery-item:hover { border-color: var(--accent-red); box-shadow: 0 10px 25px rgba(191,33,47,0.3); transform: translateY(-5px); }
+        .gallery-item:hover img, .gallery-item:hover video { opacity: 1; transform: scale(1.05); }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 15px 15px; background: linear-gradient(transparent, rgba(0,0,0,0.95)); color: #fff; font-size: 0.9rem; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none; text-align: left; }
+        .gallery-date { font-size: 0.7rem; color: var(--accent-gold); display: block; margin-top: 3px; text-transform: uppercase; font-weight: 500; }
+
         /* Többi régi bevált stílus (Űrlapok stb.) */
         .auth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
         .auth-box { background: var(--bg-card); padding: 50px; border-radius: 12px; border-top: 4px solid var(--accent-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
@@ -115,28 +124,29 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         @media(max-width: 1000px) { .auth-container, .story-grid, .admin-grid { grid-template-columns: 1fr; } .title-large { font-size: 3rem; } }
-    /* Lábléc stílus */
-footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(3, 3, 5, 0.95); text-align: center; color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px; margin-top: 50px; }
-.dev-highlight { color: var(--accent-gold); font-weight: 600; }
-.security-badge { margin-top: 15px; display: inline-block; padding: 5px 15px; background: rgba(191, 33, 47, 0.05); border: 1px solid rgba(191, 33, 47, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--accent-red); }
-</style>
+        
+        /* Lábléc stílus */
+        footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(3, 3, 5, 0.95); text-align: center; color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px; margin-top: 50px; }
+        .dev-highlight { color: var(--accent-gold); font-weight: 600; }
+        .security-badge { margin-top: 15px; display: inline-block; padding: 5px 15px; background: rgba(191, 33, 47, 0.05); border: 1px solid rgba(191, 33, 47, 0.1); border-radius: 20px; font-size: 0.75rem; color: var(--accent-red); }
+    </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
 
-    <!-- Kurzoreffektek -->
     <div class="custom-cursor-dot" id="cursor-dot"></div>
     <div class="custom-cursor-outline" id="cursor-outline"></div>
 
-    <!-- Menü -->
     <nav>
         <div class="logo">Playboys<span>.</span></div>
         <ul class="nav-links">
             <li><a href="#" class="nav-btn active" data-target="home-view">Főoldal</a></li>
+            <li><a href="#" class="nav-btn" data-target="gallery-view">Galéria</a></li>
             <li><a href="#" class="nav-btn" id="nav-status" data-target="status-view" style="display:none;">TGF Állapota</a></li>
             <li><a href="#" class="nav-btn" id="nav-admin" data-target="admin-view" style="display:none;">Admin Panel</a></li>
             <li><a href="#" class="nav-btn" id="nav-auth" data-target="auth-view">Bejelentkezés</a></li>
+            <li><span id="logged-in-user" style="display:none; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin: 0 10px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;"></span></li>
             <li><a href="#" class="nav-btn" id="nav-logout" style="display:none;" onclick="logout()">Kijelentkezés</a></li>
             <li><a href="#" class="nav-btn btn-tgf" data-target="tgf-view">Tagfelvétel</a></li>
         </ul>
@@ -144,7 +154,6 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
 
     <div class="toast" id="toast">Értesítés</div>
 
-    <!-- 1. FŐOLDAL -->
     <div class="view-section active-view" id="home-view">
         <div class="story-grid">
             <div class="story-content">
@@ -158,14 +167,44 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
                 </div>
             </div>
             
-            <!-- Letisztult, lebegő kép -->
             <div class="faction-image-container">
                 <img src="playboys1.png" alt="Playboys Syndicate">
             </div>
         </div>
+
+        <div style="margin-top: 100px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 60px;">
+            <h2 class="title-large" style="font-size: 2.5rem;">Kiemelt <span>Pillanatok</span></h2>
+            <p class="subtitle" style="margin-bottom: 30px;">Legújabb felvételek a szerverről</p>
+            <div class="gallery-grid" id="mini-gallery-container" style="margin-bottom: 40px;">
+                </div>
+            <button class="btn-submit btn-red" style="width: auto; padding: 12px 35px;" onclick="switchView('gallery-view')">Tovább a teljes archívumba ➔</button>
+        </div>
     </div>
 
-    <!-- 2. BEJELENTKEZÉS / REGISZTRÁCIÓ -->
+    <div class="view-section" id="gallery-view">
+        <h1 class="title-large">Családi <span>Archívum</span></h1>
+        <p class="subtitle">Emlékek a hálózatból</p>
+
+        <div id="admin-gallery-upload" class="auth-box box-red" style="display:none; margin-bottom: 50px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h3 style="color: var(--accent-red); margin-bottom: 10px;">Új Fájl Hozzáadása (Leader Jogosultság)</h3>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 20px;">Töltsd fel a képet/videót Discordra, kattints rá jobb klikkel ➔ "Kép/Link hivatkozásának másolása", és illeszd be a linket alább. YouTube videónál egyszerűen másold be a teljes videó linket!</p>
+            
+            <div class="form-group">
+                <label>Fájl vagy YouTube videó URL linkje:</label>
+                <input type="text" id="media-url" placeholder="https://cdn.discordapp.com/... vagy https://youtube.com/...">
+            </div>
+            <div class="form-group">
+                <label>Leírás / Megnevezés (opcionális):</label>
+                <input type="text" id="media-title" placeholder="Pl.: Akció a kikötőben">
+            </div>
+            <button class="btn-submit" style="background: #16a34a; margin-bottom:0;" onclick="uploadMedia()">Fájl Rögzítése az Adatbázisban</button>
+        </div>
+
+        <div class="loader" id="gallery-loader"></div>
+        <div class="gallery-grid" id="full-gallery-container">
+            </div>
+    </div>
+
     <div class="view-section" id="auth-view">
         <div style="text-align: center; margin-bottom: 50px;">
             <h1 class="title-large">Belépési <span>Központ</span></h1>
@@ -206,7 +245,6 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
         </div>
     </div>
 
-    <!-- 3. TAGFELVÉTEL -->
     <div class="view-section" id="tgf-view">
         <h1 class="title-large">Tagfelvételi <span>Lap</span></h1>
         <p class="subtitle">Bizonyítsd be, hogy helyed van a családban</p>
@@ -258,7 +296,6 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
         </div>
     </div>
 
-    <!-- 4. ÁLLAPOT -->
     <div class="view-section" id="status-view">
         <h1 class="title-large">Jelentkezésem <span>Állapota</span></h1>
         <p class="subtitle">A vezetőség döntése</p>
@@ -266,7 +303,6 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
         <div id="status-content" style="max-width: 800px; margin: 0 auto;"></div>
     </div>
 
-    <!-- 5. ADMIN PANEL -->
     <div class="view-section" id="admin-view">
         <h1 class="title-large">Leader <span>Központ</span></h1>
         <p class="subtitle">Bizalmas dokumentumok bírálata</p>
@@ -283,7 +319,6 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzOqgAleqO6pcW03swoKTc73c4WOaAART3IMaQs1y2H5ZaSADfBz4eI00jGEyc2HJBm/exec";
         
@@ -326,6 +361,7 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
             
             if(id === 'status-view') loadStatus();
             if(id === 'admin-view') loadAdmin();
+            if(id === 'gallery-view') loadGallery();
         }
         
         btns.forEach(b => b.addEventListener('click', e => {
@@ -342,21 +378,33 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
 
         // Felület frissítése bejelentkezési státusz alapján
         function updateUI() {
+            const userDisplay = document.getElementById('logged-in-user');
             if(currentUser) {
                 document.getElementById('nav-auth').style.display = 'none';
                 document.getElementById('nav-logout').style.display = 'block';
                 document.getElementById('nav-status').style.display = 'block';
                 document.getElementById('tgf-guest-msg').style.display = 'none';
                 document.getElementById('tgf-form-container').style.display = 'block';
-                document.getElementById('nav-admin').style.display = currentUser.role === 'admin' ? 'block' : 'none';
+                
+                const isAdmin = currentUser.role === 'admin';
+                document.getElementById('nav-admin').style.display = isAdmin ? 'block' : 'none';
+                document.getElementById('admin-gallery-upload').style.display = isAdmin ? 'block' : 'none';
+                
+                if(userDisplay) {
+                    userDisplay.innerText = `Bejelentkezve: ${currentUser.username}`;
+                    userDisplay.style.display = 'inline-block';
+                }
             } else {
                 document.getElementById('nav-auth').style.display = 'block';
                 document.getElementById('nav-logout').style.display = 'none';
                 document.getElementById('nav-status').style.display = 'none';
                 document.getElementById('nav-admin').style.display = 'none';
+                document.getElementById('admin-gallery-upload').style.display = 'none';
                 document.getElementById('tgf-guest-msg').style.display = 'block';
                 document.getElementById('tgf-form-container').style.display = 'none';
+                if(userDisplay) userDisplay.style.display = 'none';
             }
+            loadGallery(); // Képek automatikus letöltése / inicializálása
         }
 
         // API motor
@@ -489,40 +537,32 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
         }
 
         function showAppDetail(app, elem) {
-    document.querySelectorAll('.app-item').forEach(el => el.classList.remove('selected'));
-    elem.classList.add('selected');
-    
-    document.getElementById('admin-content').innerHTML = `
-        <h2 style="font-family:'Playfair Display'; font-size: 2.5rem; margin-bottom:30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">Jelentkező: <span style="color: var(--accent-red);">${app.username}</span></h2>
-        
-        <div class="qa-box"><h5>1. Mutatkozz be pár mondatban (OOC, kor, tapasztalat)</h5><p style="line-height: 1.8;">${app.q1}</p></div>
-
-<div class="qa-box"><h5>2. Miért a Playboys frakciót választottad?</h5><p style="line-height: 1.8;">${app.q2}</p></div>
-
-<div class="qa-box"><h5>3. Fejtsd ki a fogalmakat: MG, RK, MetaGaming szabályok illegálként.</h5><p style="line-height: 1.8;">${app.q3}</p></div>
-
-<div class="qa-box"><h5>4. Mi az az NRK?</h5><p style="line-height: 1.8;">${app.q4}</p></div>
-
-<div class="qa-box"><h5>5. Mi az a DM?</h5><p style="line-height: 1.8;">${app.q5}</p></div>
-
-<div class="qa-box"><h5>6. Mi az a PG?</h5><p style="line-height: 1.8;">${app.q6}</p></div>
-
-<div class="qa-box"><h5>7. Mit tennél hozzá a frakciónkhoz?</h5><p style="line-height: 1.8;">${app.q7}</p></div>
-
-<div class="qa-box"><h5>8. Milyen az RP-d? Dara vagy inkább RPs?</h5><p style="line-height: 1.8;">${app.q8}</p></div>
-
-<div class="qa-box"><h5>9. Vannak saját fegyvereid vagy a frakciónkból vennél el?</h5><p style="line-height: 1.8;">${app.q9}</p></div>
-        
-        <div style="margin-top:40px; background: rgba(0,0,0,0.5); padding: 30px; border-radius: 8px; border: 1px solid rgba(191,33,47,0.2);">
-            <h4 style="margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Vezetőségi Döntés</h4>
-            <input type="text" id="admin-reason" placeholder="Indoklás csatolása (Elutasításnál kötelező)" style="width:100%; padding:15px; background:rgba(0,0,0,0.8); color:#fff; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px; border-radius:6px; font-family: inherit;">
-            <div style="display:flex; gap:20px;">
-                <button class="btn-submit" style="background: linear-gradient(135deg, #16a34a 0%, #14532d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elfogadva')">✓ Elfogadás</button>
-                <button class="btn-submit" style="background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elutasítva')">✕ Elutasítás</button>
-            </div>
-        </div>
-    `;
-}
+            document.querySelectorAll('.app-item').forEach(el => el.classList.remove('selected'));
+            elem.classList.add('selected');
+            
+            document.getElementById('admin-content').innerHTML = `
+                <h2 style="font-family:'Playfair Display'; font-size: 2.5rem; margin-bottom:30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">Jelentkező: <span style="color: var(--accent-red);">${app.username}</span></h2>
+                
+                <div class="qa-box"><h5>1. Mutatkozz be pár mondatban (OOC, kor, tapasztalat)</h5><p style="line-height: 1.8;">${app.q1}</p></div>
+                <div class="qa-box"><h5>2. Miért a Playboys frakciót választottad?</h5><p style="line-height: 1.8;">${app.q2}</p></div>
+                <div class="qa-box"><h5>3. Fejtsd ki a fogalmakat: MG, RK, MetaGaming szabályok illegálként.</h5><p style="line-height: 1.8;">${app.q3}</p></div>
+                <div class="qa-box"><h5>4. Mi az az NRK?</h5><p style="line-height: 1.8;">${app.q4}</p></div>
+                <div class="qa-box"><h5>5. Mi az a DM?</h5><p style="line-height: 1.8;">${app.q5}</p></div>
+                <div class="qa-box"><h5>6. Mi az a PG?</h5><p style="line-height: 1.8;">${app.q6}</p></div>
+                <div class="qa-box"><h5>7. Mit tennél hozzá a frakciónkhoz?</h5><p style="line-height: 1.8;">${app.q7}</p></div>
+                <div class="qa-box"><h5>8. Milyen az RP-d? Dara vagy inkább RPs?</h5><p style="line-height: 1.8;">${app.q8}</p></div>
+                <div class="qa-box"><h5>9. Vannak saját fegyvereid vagy a frakciónkból vennél el?</h5><p style="line-height: 1.8;">${app.q9}</p></div>
+                
+                <div style="margin-top:40px; background: rgba(0,0,0,0.5); padding: 30px; border-radius: 8px; border: 1px solid rgba(191,33,47,0.2);">
+                    <h4 style="margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Vezetőségi Döntés</h4>
+                    <input type="text" id="admin-reason" placeholder="Indoklás csatolása (Elutasításnál kötelező)" style="width:100%; padding:15px; background:rgba(0,0,0,0.8); color:#fff; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px; border-radius:6px; font-family: inherit;">
+                    <div style="display:flex; gap:20px;">
+                        <button class="btn-submit" style="background: linear-gradient(135deg, #16a34a 0%, #14532d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elfogadva')">✓ Elfogadás</button>
+                        <button class="btn-submit" style="background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%); margin-bottom: 0;" onclick="review('${app.id}', 'Elutasítva')">✕ Elutasítás</button>
+                    </div>
+                </div>
+            `;
+        }
 
         async function review(appId, status) {
             const reason = document.getElementById('admin-reason').value.trim();
@@ -537,9 +577,106 @@ footer { padding: 40px 5%; border-top: 1px solid rgba(255, 255, 255, 0.05); back
             }
         }
 
+        // GALÉRIA RENDSZER KEZELÉSE (ÚJ)
+        async function uploadMedia() {
+            const url = document.getElementById('media-url').value.trim();
+            const title = document.getElementById('media-title').value.trim();
+            if(!url) return showToast("A link megadása kötelező!");
+            
+            showToast("Fájl rögzítése a családi archívumban...");
+            const res = await fetchAPI({ action: "addMedia", url: url, title: title, uploader: currentUser.username });
+            showToast(res.message);
+            if(res.success) {
+                document.getElementById('media-url').value = '';
+                document.getElementById('media-title').value = '';
+                loadGallery(); // Képek és videók újratöltése
+            }
+        }
+
+        // Okos média HTML elem generáló (Kép, Videó, YouTube detektálással)
+        function getMediaTag(url, title, isMini = false) {
+            // YouTube detektálás
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = '';
+                try {
+                    if (url.includes('youtube.com/watch?v=')) {
+                        videoId = url.split('v=')[1].split('&')[0];
+                    } else if (url.includes('youtu.be/')) {
+                        videoId = url.split('youtu.be/')[1].split('?')[0];
+                    } else {
+                        videoId = url;
+                    }
+                } catch(e) {
+                    videoId = url;
+                }
+                
+                if (isMini) {
+                    // Főoldali kiemelt videókhoz a YouTube borítóképet töltjük be teljes iframe helyett a jobb teljesítményért
+                    return `<img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" alt="${title}" style="width:100%; height:100%; object-fit:cover;">`;
+                }
+                return `<iframe src="https://www.youtube.com/embed/${videoId}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; border-radius: 8px;"></iframe>`;
+            } 
+            // MP4 vagy egyéb videó formátumok
+            else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.mov')) {
+                if (isMini) {
+                    // A főoldalon magától némítva lejátszódnak ciklusban (mint a GIF-ek)
+                    return `<video src="${url}" muted autoplay loop style="width:100%; height:100%; object-fit:cover;"></video>`;
+                }
+                return `<video src="${url}" controls muted style="width:100%; height:100%; object-fit:cover;"></video>`;
+            } 
+            // Alapértelmezett: Kép renderelése
+            else {
+                return `<img src="${url}" alt="${title}" style="width:100%; height:100%; object-fit:cover;">`;
+            }
+        }
+
+        async function loadGallery() {
+            const loader = document.getElementById('gallery-loader');
+            if (loader) loader.style.display = 'block';
+            
+            const res = await fetchAPI({ action: "getGallery" });
+            if (loader) loader.style.display = 'none';
+
+            if(res.success && res.media && res.media.length > 0) {
+                let htmlContent = '';
+                res.media.forEach(item => {
+                    let mediaTag = getMediaTag(item.url, item.title, false);
+                    htmlContent += `
+                        <div class="gallery-item">
+                            ${mediaTag}
+                            <div class="gallery-caption">
+                                ${item.title || 'Archív felvétel'}
+                                <span class="gallery-date">Feltöltötte: ${item.uploader} | ${item.date}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const fullContainer = document.getElementById('full-gallery-container');
+                if (fullContainer) fullContainer.innerHTML = htmlContent;
+                
+                // Főoldali kiemelt galéria feltöltése (legújabb 3 darab)
+                const miniContainer = document.getElementById('mini-gallery-container');
+                if (miniContainer) {
+                    const miniGalleryItems = res.media.slice(0, 3).map(item => {
+                        let mediaTag = getMediaTag(item.url, item.title, true);
+                        return `<div class="gallery-item">${mediaTag}</div>`;
+                    }).join('');
+                    miniContainer.innerHTML = miniGalleryItems;
+                }
+            } else {
+                const fullContainer = document.getElementById('full-gallery-container');
+                if (fullContainer) fullContainer.innerHTML = '<p style="color:var(--text-gray); text-align:center; grid-column: 1 / -1;">Még nincsenek feltöltött fájlok.</p>';
+                
+                const miniContainer = document.getElementById('mini-gallery-container');
+                if (miniContainer) miniContainer.innerHTML = '<p style="color:var(--text-gray); text-align:center; grid-column: 1 / -1;">Még nincsenek kiemelt pillanatok.</p>';
+            }
+        }
+
         updateUI();
     </script>
-<footer>
+    
+    <footer>
         <div class="footer-content">
             <p>&copy; 2026 Playboys Syndicate. Minden jog fenntartva.</p>
             <p>Webfejlesztő discordja: <span class="dev-highlight">xmatee.</span></p>
